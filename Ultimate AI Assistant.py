@@ -82,7 +82,7 @@ class UltimateAssistant:
         math_match = re.search(r'calculate (.*)|what is (.*)|solve (.*)', text)
         if math_match:
             expr = next(g for g in math_match.groups() if g is not None)
-            return f"The result is: {self.calc_math(expr)}"
+            return f"The result is: {self.calculate_math(expr)}"
 
         for pattern, responses in self.academic_kb.items():
             if re.search(pattern, text):
@@ -122,3 +122,4 @@ class UltimateAssistant:
 
 if __name__ == "__main__":
     UltimateAssistant().run()
+
