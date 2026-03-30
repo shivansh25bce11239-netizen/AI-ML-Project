@@ -109,7 +109,7 @@ class UnifiedAssistant:
                 user_in = input("You: ")
                 if not user_in:
                     continue
-                if user_in.lower() in ['exit', 'quit', 'stop']:
+                if user_in.lower() in ['exit', 'quit', 'stop','bye']:
                     print("AI: Saving data. Shutting down.")
                     break
                     
