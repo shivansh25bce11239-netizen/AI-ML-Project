@@ -3,38 +3,38 @@ import datetime
 import random
 import os
 
-class UnifiedAssistant:
+class UltimateAssistant:
     def __init__(self):
         self.task_file = "user_tasks.txt"
-        self.log_file = "chat_logs.txt"
+        self.log_file = "logs.txt"
         self.tasks = []
         self.load_tasks()
 
-        self.academic_kb = {
-            r'.*(fee|tuition|pay|cost|dues).*': [
-                "Tuition and hostel fees can be paid via the student portal.",
-                "Fee payment deadlines are mid-semester. Check your email for dates."
+        self.academic_help = {
+            r'(fee|tuition|pay|cost|dues)': [
+                "Tuition and hostel fees can be paid using the student portal.",
+                "Fee payment deadlines for this semester are already provided in email. Check your email for dates."
             ],
-            r'.*(course|register|enroll|credits).*': [
+            r'(course|register|enroll|credits)': [
                 "Course registration opens two weeks prior to the semester.",
                 "Advisor approval is needed for core courses."
             ],
-            r'.*(grade|gpa|cgpa|marks|result).*': [
+            r'(grade|gpa|cgpa|marks|result)': [
                 "Results are on the portal. Minimum CGPA is 6.0.",
                 "Contact your professor for grade discrepancies within 48 hours."
             ],
-            r'.*(exam|schedule|timetable|date).*': [
+            r'(exam|schedule|timetable|date)': [
                 "Final exam schedules are released one month prior to exams."
             ],
-            r'.*(password|login|access|account).*': [
+            r'(password|login|access|account)': [
                 "Use 'Forgot Password' with your university email to reset access."
             ]
         }
 
-        self.it_kb = {
+        self.it = {
             r'.*my (.*) is not working.*': "Have you tried restarting your {0} or checking its connection?",
             r'.*screen is (.*).*': "If your screen is {0}, try checking the display cable.",
-            r'.*hello.*|.*hi.*': "Hello! I am your Unified AI Assistant. How can I help?"
+            r'hello|hi': "Hello! I am your AI Assistant. How can I help?"
         }
 
     def load_tasks(self):
@@ -52,7 +52,7 @@ class UnifiedAssistant:
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             f.write(f"[{timestamp}] USER: {user_in} | AI: {bot_out}\n")
 
-    def calc_math(self, expr):
+    def calculate_math(self, expr):
         clean = re.sub(r'[^0-9+\-*/().]', '', expr)
         try:
             if not clean:
@@ -99,7 +99,7 @@ class UnifiedAssistant:
 
     def run(self):
         print("===============================================")
-        print("   Unified AI Assistant & Academic Helpdesk    ")
+        print("      AI Assistant & Academic Helpdesk    ")
         print("===============================================")
         print("Capabilities: Task Management | Math | IT Support | Academic Queries")
         print("Type 'exit' to quit and save logs.\n")
@@ -121,4 +121,4 @@ class UnifiedAssistant:
                 break
 
 if __name__ == "__main__":
-    UnifiedAssistant().run()
+    UltimateAssistant().run()
