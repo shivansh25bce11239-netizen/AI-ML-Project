@@ -19,7 +19,7 @@ class UltimateAssistant:
                 "Fee payment deadlines for this semester are already provided in email. Check your email for dates."
             ],
             r'(course|register|enroll|credits)': [
-                "Course registration opens two weeks prior to the semester.",
+                "Course registration opens two weeks before the semester starts.",
                 "Advisor approval is needed for core courses."
             ],
             r'(grade|gpa|cgpa|marks|result)': [
@@ -50,26 +50,26 @@ class UltimateAssistant:
             for task in self.tasks:
                 f.write(task + "\n")
 
-    def log_chat(self, user_in, bot_out):
+    def log_chat(self, user_given_input, bot_out):
         with open(self.log_file, 'a') as f:
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            f.write(f"[{timestamp}] USER: {user_in} | AI: {bot_out}\n")
+            f.write(f"[{timestamp}] USER: {user_given_input} | AI: {bot_out}\n")
 
-    def calculate_math(self, expr):
-        expr = expr.replace("ans", str(self.last_math_result))
-        expr = expr.replace("previous", str(self.last_math_result))
+    def calculate_math(self, expression):
+        expression = expression.replace("ans", str(self.last_math_result))
+        expression = expression.replace("previous", str(self.last_math_result))
         
-        expr = expr.replace("plus", "+").replace("add", "+")
-        expr = expr.replace("minus", "-").replace("subtract", "-")
-        expr = expr.replace("times", "*").replace("multiplied by", "*").replace("multiply", "*")
-        expr = expr.replace("divided by", "/").replace("divide", "/").replace("over", "/")
+        expression = expression.replace("plus", "+").replace("add", "+")
+        expression = expression.replace("minus", "-").replace("subtract", "-")
+        expression = expression.replace("times", "*").replace("multiplied by", "*").replace("multiply", "*")
+        expression = expression.replace("divided by", "/").replace("divide", "/").replace("over", "/")
         
-        clean = re.sub(r'[^0-9+\-*/().]', '', expr)
+        cleaned_expression = re.sub(r'[^0-9+\-*/().]', '', expression)
         try:
-            if not clean:
+            if not cleaned_expression:
                 return "No valid numbers found in your request."
             
-            result = eval(clean)
+            result = eval(cleaned_expression)
             self.last_math_result = result
             return str(result)
         except:
@@ -105,8 +105,8 @@ class UltimateAssistant:
 
         math_match = re.search(r'calculate (.*)|what is (.*)|solve (.*)', text)
         if math_match:
-            expr = next(g for g in math_match.groups() if g is not None)
-            return f"The result is: {self.calculate_math(expr)}"
+            expression = next(g for g in math_match.groups() if g is not None)
+            return f"The result is: {self.calculate_math(expression)}"
 
         for pattern, responses in self.academic_help.items():
             if re.search(pattern, text):
@@ -131,7 +131,7 @@ class UltimateAssistant:
             self.save_expense(amt, item.strip())
             return f"Logged expense: {amt} for {item.strip()}."
 
-        if "show expenses" in text or "my ledger" in text:
+        if "show expenses" in text or "show expenses" in text or "my ledger" in text:
             return self.read_expenses()
 
         sys_match = re.search(r'open (.*)|launch (.*)', text)
@@ -154,7 +154,7 @@ class UltimateAssistant:
                 
             return f"Cannot launch '{app}'. App not recognized or OS not supported."
 
-        if "clear screen" in text or "clean terminal" in text:
+        if "clear screen" in text or "cleaned_expression terminal" in text:
             os.system('cls' if os.name == 'nt' else 'clear')
             return "Terminal cleared."
 
@@ -169,20 +169,19 @@ class UltimateAssistant:
         
         while True:
             try:
-                user_in = input("You: ")
-                if not user_in:
+                user_given_input = input("You: ")
+                if not user_given_input:
                     continue
-                if user_in.lower() in ['exit', 'quit', 'stop','bye']:
+                if user_given_input.lower() in ['exit', 'quit', 'stop','bye']:
                     print("AI: Saving data. Shutting down.")
                     break
                     
-                out = self.process(user_in)
+                out = self.process(user_given_input)
                 print(f"AI: {out}\n")
-                self.log_chat(user_in, out)
+                self.log_chat(user_given_input, out)
                 
             except KeyboardInterrupt:
                 break
 
-if __name__== "__main__":
+if __name__ == "__main__":
     UltimateAssistant().run()
-
