@@ -2,11 +2,14 @@ import re
 import datetime
 import random
 import os
+import sys
 
 class UltimateAssistant:
     def __init__(self):
         self.task_file = "user_tasks.txt"
         self.log_file = "logs.txt"
+        self.expense_file = "user_expenses.txt"
+        self.last_math_result = 0
         self.tasks = []
         self.load_tasks()
 
@@ -53,13 +56,34 @@ class UltimateAssistant:
             f.write(f"[{timestamp}] USER: {user_in} | AI: {bot_out}\n")
 
     def calculate_math(self, expr):
+        expr = expr.replace("ans", str(self.last_math_result))
+        expr = expr.replace("previous", str(self.last_math_result))
+        
+        expr = expr.replace("plus", "+").replace("add", "+")
+        expr = expr.replace("minus", "-").replace("subtract", "-")
+        expr = expr.replace("times", "*").replace("multiplied by", "*").replace("multiply", "*")
+        expr = expr.replace("divided by", "/").replace("divide", "/").replace("over", "/")
+        
         clean = re.sub(r'[^0-9+\-*/().]', '', expr)
         try:
             if not clean:
                 return "No valid numbers found in your request."
-            return str(eval(clean))
+            
+            result = eval(clean)
+            self.last_math_result = result
+            return str(result)
         except:
             return "Mathematical error. Please ensure the equation is valid."
+
+    def save_expense(self, amount, item):
+        with open(self.expense_file, 'a') as f:
+            f.write(f"{datetime.datetime.now().ctime()} | Amount: {amount} | Item: {item}\n")
+
+    def read_expenses(self):
+        if not os.path.exists(self.expense_file):
+            return "No expenses logged yet."
+        with open(self.expense_file, 'r') as f:
+            return "Your Expense Ledger:\n" + f.read()
 
     def process(self, user_input):
         text = user_input.lower().strip()
@@ -84,16 +108,55 @@ class UltimateAssistant:
             expr = next(g for g in math_match.groups() if g is not None)
             return f"The result is: {self.calculate_math(expr)}"
 
-        for pattern, responses in self.academic_kb.items():
+        for pattern, responses in self.academic_help.items():
             if re.search(pattern, text):
                 return random.choice(responses)
 
-        for pattern, response in self.it_kb.items():
+        for pattern, response in self.it.items():
             match = re.search(pattern, text)
             if match:
                 if '{0}' in response and match.groups():
                     return response.format(match.group(1))
                 return response
+            
+        temp = re.sub(r'ans|previous|plus|minus|times|divided by|divide|over|add|subtract|multiplied by', '', text)
+        leftovers = re.sub(r'[0-9\s\+\-\*\/\(\)]', '', temp)
+        if leftovers == "" and len(text) > 0:
+            return f"The result is: {self.calculate_math(text)}"
+            
+        expense_match = re.search(r'spent ([0-9]+) on (.*)|cost ([0-9]+) for (.*)', text)
+        if expense_match:
+            amt = expense_match.group(1) if expense_match.group(1) else expense_match.group(3)
+            item = expense_match.group(2) if expense_match.group(2) else expense_match.group(4)
+            self.save_expense(amt, item.strip())
+            return f"Logged expense: {amt} for {item.strip()}."
+
+        if "show expenses" in text or "my ledger" in text:
+            return self.read_expenses()
+
+        sys_match = re.search(r'open (.*)|launch (.*)', text)
+        if sys_match:
+            app = next(g for g in sys_match.groups() if g is not None).strip()
+            
+            if "notepad" in app or "text" in app:
+                if os.name == 'nt':
+                    os.system("start notepad")
+                elif sys.platform == "darwin":
+                    os.system("open -a TextEdit")
+                return "Launched Text Editor."
+                
+            elif "calculator" in app or "calc" in app:
+                if os.name == 'nt':
+                    os.system("start calc")
+                elif sys.platform == "darwin":
+                    os.system("open -a Calculator")
+                return "Launched Calculator."
+                
+            return f"Cannot launch '{app}'. App not recognized or OS not supported."
+
+        if "clear screen" in text or "clean terminal" in text:
+            os.system('cls' if os.name == 'nt' else 'clear')
+            return "Terminal cleared."
 
         return "I am an intro-level AI. I do not recognize that command or question."
 
@@ -120,6 +183,6 @@ class UltimateAssistant:
             except KeyboardInterrupt:
                 break
 
-if __name__ == "__main__":
+if __name__== "__main__":
     UltimateAssistant().run()
 
