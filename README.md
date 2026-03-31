@@ -14,13 +14,13 @@ This project uses strictly built-in Python libraries (re, datetime, random, os, 
 
 1. Ensure Python 3.x is installed on your system.
 
-2. Clone this repository or download unified_ai.py.
+2. Clone this repository or download AI_Agent.py.
 
 3. Open your terminal or command prompt.
 
 4. Navigate to the project directory.
 
-5. Run the application: python unified_ai.py
+5. Run the application: python AI_Agent.py.
 
 ## Usage Examples
 Talk to the AI naturally in the terminal:
