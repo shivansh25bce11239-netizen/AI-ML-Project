@@ -10,9 +10,17 @@ This Command Line Interface (CLI) application integrates a personal productivity
 - **Conversational Academic Support:** Randomizes responses from a Knowledge Base to answer student queries regarding fees, exams, and grades.
 
 ## Setup Instructions
-1. Ensure Python 3.x is installed. No external packages are required.
-2. Download `AI Agent.py`.
-3. Open your terminal or command prompt and run: `python AI Agent.py`
+This project uses strictly built-in Python libraries (re, datetime, random, os, sys) to guarantee absolute privacy and zero external dependencies.
+
+1. Ensure Python 3.x is installed on your system.
+
+2. Clone this repository or download unified_ai.py.
+
+3. Open your terminal or command prompt.
+
+4. Navigate to the project directory.
+
+5. Run the application: python unified_ai.py
 
 ## Usage Examples
 Talk to the AI naturally in the terminal:
