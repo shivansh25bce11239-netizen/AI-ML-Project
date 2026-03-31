@@ -11,8 +11,8 @@ This Command Line Interface (CLI) application integrates a personal productivity
 
 ## Setup Instructions
 1. Ensure Python 3.x is installed. No external packages are required.
-2. Download `Ultimate AI Assistant.py`.
-3. Open your terminal or command prompt and run: `python Ultimate AI Assistant.py`
+2. Download `AI Agent.py`.
+3. Open your terminal or command prompt and run: `python AI Agent.py`
 
 ## Usage Examples
 Talk to the AI naturally in the terminal:
