@@ -6,7 +6,7 @@ This Command Line Interface (CLI) application integrates a personal productivity
 ## Features
 - **Intelligent Routing:** The AI uses Regular Expressions (Regex) to classify intents, seamlessly switching between mathematical computation, task management, and academic answers.
 - **Dynamic Math Engine:** Safely extracts and calculates mathematical equations from conversational sentences (e.g., "Calculate 50 / 2").
-- **Plain Text Storage:** Avoids complex database setups or JSON formatting by logging all chats to `chat_logs.txt` and persisting to-do items in `user_tasks.txt`.
+- **Plain Text Storage:** Avoids complex database setups or JSON formatting by logging all chats to `logs.txt` and persisting to-do items in `user_tasks.txt`.
 - **Conversational Academic Support:** Randomizes responses from a Knowledge Base to answer student queries regarding fees, exams, and grades.
 
 ## Setup Instructions
